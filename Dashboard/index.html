@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postmate</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- CSS Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- Font-Awesome-Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- BoxIcons  -->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+</head>
+
+<body>
+    <!-- For Header -->
+    <header id="header">
+        <div class="head row g-0">
+
+            <div class="logo col-4">
+                <i class="fa-solid fa-dove fa-shake"></i>
+                <h2 class="m-0">Postmate</h2>
+            </div>
+
+            <div class="search col-4">
+                <div class="searchBar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search Postmate" class="srchInput">
+                </div>
+            </div>
+
+            <div class="account col-4">
+                <button type="button" class="notificationBtn">
+                    <i class="fa-solid fa-bell"></i>
+                </button>
+                <button type="button" class="profileBtn">
+                    <div class="profileIconImg" onclick="showDropdown()">
+                        <img src="../Assets/Avatar.jpg" alt="">
+                    </div>
+                    <div class="profileBtnDropdown hide">
+                        <a href="../Profile/index.html" class="accountLink profile">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                        </a>
+                        <a href="#" class="accountLink settings">
+                            <i class="fa-solid fa-gear"></i>
+                            Settings
+                        </a>
+                        <a href="#" class="accountLink logOut">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Logout
+                        </a>
+                    </div>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- For Dashboard -->
+    <div class="dashboard container-fluid g-0">
+        <div class="dashboardRow row g-0">
+
+            <!-- For Left-Content -->
+            <div class="leftContent col-3">
+                <!-- For User Details Section in Left Content -->
+                <section class="userDetails row g-0">
+                    <div class="userDP col-12 p-0">
+                        <p class="followers m-0"><span>0</span> followers</p>
+                        <p class="following m-0"><span>0</span> following</p>
+                    </div>
+
+                    <div class="userProfilePicture p-0">
+                        <img src="../Assets/Avatar.jpg" alt="User-Image">
+                    </div>
+
+                    <div class="aboutUser col-12 g-0">
+                        <h2 class="userName m-0"></h2>
+                        <h2 class="userEmail m-0"></h2>
+                        <p class="userDescription m-0"></p>
+                        <a href="#">
+                            <button type="button" class="viewProfile">View Profile</button>
+                        </a>
+                    </div>
+                </section>
+
+                <!-- For Navigation in Left Content -->
+                <nav class="nav">
+                    <ul class="navigations p-0">
+                        <li class="navItems">
+                            <a href="./index.html" class="navLinks">
+                                <i class="fa-solid fa-house"></i>
+                                <p class="m-0">Home</p>
+                            </a>
+                        </li>
+
+                        <li class="navItems">
+                            <a href="#" class="navLinks">
+                                <i class="fa-solid fa-hashtag"></i>
+                                <p class="m-0">Explore</p>
+                            </a>
+                        </li>
+
+                        <li class="navItems">
+                            <a href="#" class="navLinks">
+                                <i class="fa-solid fa-bell"></i>
+                                <p class="m-0">Notification</p>
+                            </a>
+                        </li>
+
+                        <li class="navItems">
+                            <a href="#" class="navLinks">
+                                <i class="fa-solid fa-envelope"></i>
+                                <p class="m-0">Messages</p>
+                            </a>
+                        </li>
+
+                        <li class="navItems">
+                            <a href="#" class="navLinks">
+                                <i class="fa-solid fa-bookmark"></i>
+                                <p class="m-0">Bookmarks</p>
+                            </a>
+                        </li>
+
+                        <li class="navItems">
+                            <a href="#" class="navLinks">
+                                <i class="fa-sharp fa-solid fa-heart"></i>
+                                <p class="m-0">Favourites</p>
+                            </a>
+                        </li>
+
+                        <li class="navItems">
+                            <a href="#" class="navLinks">
+                                <i class="fa-solid fa-user-group"></i>
+                                <p class="m-0">Friends</p>
+                            </a>
+                        </li>
+
+                        <li class="navItems">
+                            <a href="#" class="navLinks">
+                                <i class="fa-solid fa-people-group"></i>
+                                <p class="m-0">Groups</p>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <button type="button" class="createPostBtn" onclick="postModalOpen()">Create Post</button>
+                    <button type="button" class="logOutBtn logOut">Log out</button>
+                </nav>
+            </div>
+
+            <!-- For Middle-Content -->
+            <div class="middleContent col-6">
+
+                <!-- For Posting Area in Middle Content -->
+                <section class="posting row g-0">
+                    <div class="upperSection col-12">
+                        <div class="userImg">
+                            <img src="../Assets/Avatar.jpg" alt="User-Image">
+                        </div>
+                        <div class="postInputArea">
+                            <input type="text" class="postInput" onclick="postModalOpen()" readonly>
+                        </div>
+                    </div>
+
+                    <div class="lowerSection col-12">
+                        <button type="button" class="postMediaBtn">
+                            <i class="fa-solid fa-image"></i>
+                            Photos
+                        </button>
+                        <button type="button" class="postMediaBtn">
+                            <i class="fa-solid fa-video"></i>
+                            Videos
+                        </button>
+                        <button type="button" class="postMediaBtn">
+                            <i class="fa-solid fa-icons"></i>
+                            Activity
+                        </button>
+                        <button type="button" class="postMediaBtn">
+                            <i class="fa-solid fa-newspaper"></i>
+                            Article
+                        </button>
+                    </div>
+                </section>
+
+
+                <!-- For Posts Section in Middle Content -->
+                <section class="postsArea row g-0">
+
+                    <div class="post col-12">
+                        <button class="postSaveOrDeleteBtn m-0 p-0">
+                            <i class="fa-solid fa-ellipsis"></i>
+                        </button>
+
+                        <div class="postAuthorDetails">
+                            <div class="authorImage">
+                                <img src="../Assets/Avatar.jpg" alt="Author-Image">
+                            </div>
+                            <div class="authorDetail">
+                                <h3 class="authorName m-0">Postmate</h3>
+                                <h6 class="authorDescription m-0">Lorem ipsum dolor sit amet consectetur adipisicing
+                                    elit.</h6>
+                                <p class="authorDescription m-0">--</p>
+                            </div>
+                        </div>
+
+                        <div class="postContent">
+                            <div class="postTextArea">
+                                <p class="postText m-0">Welcome To Postmate</p>
+                            </div>
+
+                            <div class="postMedia">
+                                <img src="../Assets/post_1.jpg" alt="Post_Image" class="img-fluid">
+                            </div>
+
+                            <!-- <div class="postInfo">
+                                <span class="postLikesView">
+                                    <i class="fa-regular fa-heart"></i>
+                                    10
+                                </span>
+
+                                <div class="postComments_Shares">
+                                    <span class="postCommentsView"><b>13</b> comments</span>
+                                    <span class="postSharesView"><b>8</b> shares</span>
+                                </div>
+                            </div>
+
+                            <div class="likeCommentShareBtns">
+                                <button type="button" class="lkCmntShrBtn likeBtn">
+                                    <i class="fa-solid fa-heart"></i>
+                                    Like
+                                </button>
+                                <button type="button" class="lkCmntShrBtn commentBtn">
+                                    <i class="fa-solid fa-message"></i>
+                                    Comment
+                                </button>
+                                <button type="button" class="lkCmntShrBtn shareBtn">
+                                    <i class="fa-solid fa-share"></i>
+                                    Share
+                                </button>
+                            </div> -->
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+
+            <!-- For Right-Content -->
+            <div class="rightContent col-3">
+                <!-- For Messages Area -->
+                <section class="messagesArea">
+                    <div class="messageHeading">
+                        <h4 class="m-0">Messages</h4>
+                        <i class="fa-regular fa-pen-to-square"></i>
+                    </div>
+
+                    <div class="searchMessage">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="search" id="search_Messages" placeholder="Search Messages">
+                    </div>
+
+                    <div class="msgs_area">
+                        <div class="message">
+                            <div class="msgUserImage">
+                                <img src="../Assets/pp1.jpg" alt="Message-User" class="img-fluid">
+                            </div>
+                            <div class="msgUserText">
+                                <h3 class="m-0">Hamza Ibad</h3>
+                                <p class="m-0">Hey! where are you bro.</p>
+                            </div>
+                        </div>
+
+                        <div class="message">
+                            <div class="msgUserImage">
+                                <img src="../Assets/pp3.jpg" alt="Message-User" class="img-fluid">
+                            </div>
+                            <div class="msgUserText">
+                                <h3 class="m-0">Zakir Khan</h3>
+                                <p class="m-0">Hey! where are you bro.</p>
+                            </div>
+                        </div>
+
+                        <div class="message">
+                            <div class="msgUserImage">
+                                <img src="../Assets/pp2.jpg" alt="Message-User">
+                            </div>
+                            <div class="msgUserText">
+                                <h3 class="m-0">Sehrish Awaan</h3>
+                                <p class="m-0">Hey! where are you bro.</p>
+                            </div>
+                        </div>
+
+                        <div class="message">
+                            <div class="msgUserImage">
+                                <img src="../Assets/pp4.jpg" alt="Message-User">
+                            </div>
+                            <div class="msgUserText">
+                                <h3 class="m-0">Muhammad Wasim</h3>
+                                <p class="m-0">Hey! where are you bro.</p>
+                            </div>
+                        </div>
+
+                        <div class="message">
+                            <div class="msgUserImage">
+                                <img src="../Assets/pp5.jpeg" alt="Message-User">
+                            </div>
+                            <div class="msgUserText">
+                                <h3 class="m-0">Sufiyan Ahmed</h3>
+                                <p class="m-0">Hey! where are you bro.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <section class="requestsArea">
+                    <div class="requestHeading">
+                        <h4 class="m-0">Requests</h4>
+                    </div>
+
+                    <div class="rqst_Area">
+                        <div class="request">
+                            <div class="requestDetail">
+                                <div class="requestUserImage">
+                                    <img src="../Assets/pp4.jpg" alt="Message-User">
+                                </div>
+                                <div class="requestUserText">
+                                    <h3 class="m-0">Daniyal Zubair</h3>
+                                    <p class="m-0">8 mutual friends</p>
+                                </div>
+                            </div>
+                            <div class="requestButtons">
+                                <button class="acceptBtn rqstBtns">Accept</button>
+                                <button class="declineBtn rqstBtns">Decline</button>
+                            </div>
+                        </div>
+
+                        <div class="request">
+                            <div class="requestDetail">
+                                <div class="requestUserImage">
+                                    <img src="../Assets/pp5.jpeg" alt="Message-User">
+                                </div>
+                                <div class="requestUserText">
+                                    <h3 class="m-0">Aijaz Muneer</h3>
+                                    <p class="m-0">12 mutual friends</p>
+                                </div>
+                            </div>
+                            <div class="requestButtons">
+                                <button class="acceptBtn rqstBtns">Accept</button>
+                                <button class="declineBtn rqstBtns">Decline</button>
+                            </div>
+                        </div>
+
+                        <div class="request">
+                            <div class="requestDetail">
+                                <div class="requestUserImage">
+                                    <img src="../Assets/pp6.jpg" alt="Message-User">
+                                </div>
+                                <div class="requestUserText">
+                                    <h3 class="m-0">Saba Qureshi</h3>
+                                    <p class="m-0">27 mutual friends</p>
+                                </div>
+                            </div>
+                            <div class="requestButtons">
+                                <button class="acceptBtn rqstBtns">Accept</button>
+                                <button class="declineBtn rqstBtns">Decline</button>
+                            </div>
+                        </div>
+
+                        <div class="request">
+                            <div class="requestDetail">
+                                <div class="requestUserImage">
+                                    <img src="../Assets/pp2.jpg" alt="Message-User">
+                                </div>
+                                <div class="requestUserText">
+                                    <h3 class="m-0">Amna Malik</h3>
+                                    <p class="m-0">14 mutual friends</p>
+                                </div>
+                            </div>
+                            <div class="requestButtons">
+                                <button class="acceptBtn rqstBtns">Accept</button>
+                                <button class="declineBtn rqstBtns">Decline</button>
+                            </div>
+                        </div>
+
+                        <div class="request">
+                            <div class="requestDetail">
+                                <div class="requestUserImage">
+                                    <img src="../Assets/pp1.jpg" alt="Message-User">
+                                </div>
+                                <div class="requestUserText">
+                                    <h3 class="m-0">Sheraz Shah</h3>
+                                    <p class="m-0">6 mutual friends</p>
+                                </div>
+                            </div>
+                            <div class="requestButtons">
+                                <button class="acceptBtn rqstBtns">Accept</button>
+                                <button class="declineBtn rqstBtns">Decline</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- For Overlay Content -->
+    <div id="overlay" class="overlay hide">
+        <!-- For Posting Modal -->
+        <section class="postingModal hide">
+            <div class="createPostHeading">
+                <h2 class="m-0">Create Post</h2>
+                <button type="button" class="closePostingModalBtn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="modalPostUser">
+                <div class="modalPostUserImage">
+                    <img src="../Assets/Avatar.jpg" alt="User_Image">
+                </div>
+                <div class="modalPostUserName">
+                    <h3 class="m-0 modalUserName"></h3>
+                    <p class="m-0">Post to Anyone</p>
+                </div>
+            </div>
+
+            <div class="modalPostContent">
+                <div class="postCntnt">
+                    <textarea class="postTextarea" placeholder="What do you want to talk about?"></textarea>
+                    <div class="selectMediaFile">
+                        <button type="button" class="removeMediaBtn hide">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        <img src="" alt="" id="postImageDisplay" class="img-fluid hide">
+                        <video src="" id="postVideoDisplay" class="hide" controls></video>
+                    </div>
+                </div>
+                <div class="addEmoji">
+                    <span class="emoji">
+                        <i class="fa-regular fa-face-smile"></i>
+                    </span>
+                </div>
+            </div>
+
+            <div class="modalPostAssets">
+                <div class="addToPostText">
+                    <p class="m-0">Add to your Post</p>
+                </div>
+                <div class="addToAsset">
+                    <div class="addImage addMedia">
+                        <label for="input_Image"><i class="fa-solid fa-image"></i></label>
+                        <input type="file" accept=".jpg, .jpeg, .png" id="input_Image">
+                    </div>
+
+                    <div class="addVideo addMedia">
+                        <label for="input_Video"><i class="fa-solid fa-video"></i></label>
+                        <input type="file" accept=".mp4" id="input_Video">
+                    </div>
+
+                    <div class="addVideo addMedia">
+                        <label for="input_Gif"><i class='bx bxs-file-gif'></i></label>
+                        <input type="file" accept=".gif" id="input_Gif">
+                    </div>
+                </div>
+            </div>
+
+            <button class="postingBtn" onclick="postCreation()">Post</button>
+        </section>
+
+    </div>
+
+
+
+    <script src="app.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

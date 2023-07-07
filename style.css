@@ -1,0 +1,545 @@
+@import url('https://fonts.googleapis.com/css2?family=K2D:wght@100;200;300;400;500;600;700;800&family=Macondo&family=Poppins:wght@200;300;400;500;600;700;800&family=Sacramento&family=Tsukimi+Rounded:wght@300;400;500;600;700&family=Varela+Round&display=swap');
+/* font-family: 'Righteous', cursive; */
+
+:root {
+    --primary-Color: #22e2a2;
+    --secondary-Color: #666666;
+    --bg-Theme-Light: #fafafa;
+    --bg-Items-Light: #f5f5f5;
+    --text-Color-Dark: #505050;
+    --text-Color-Medium: #eeeeee;
+    --text-Color-Light: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 10px;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Overlay Main Container */
+.overlay_bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(3px);
+    filter: brightness(0.6);
+    z-index: 10;
+}
+
+/* Main Body Container */
+#main {
+    width: 100%;
+    height: 100vh;
+    background-image: url('./Assets/Login-bg.jpg');
+    background-blend-mode: multiply;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Login Form */
+.loginForm {
+    width: 500px;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    border-radius: 8px;
+    border: 2px solid var(--primary-Color);
+    padding: 10px 20px;
+    position: absolute;
+    z-index: 15;
+}
+
+/* Login Form Header */
+.loginForm .formHeader {
+    width: 100%;
+    color: var(--text-Color-Light);
+}
+
+.formHeader .logo {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0px;
+}
+
+.logo i {
+    font-size: 3rem;
+}
+
+.formHeader .heading {
+    width: 100%;
+    text-align: center;
+}
+
+.heading h1 {
+    font-size: 3.4rem;
+    font-family: 'K2D', sans-serif;
+    padding: 0px 0px 10px 0px;
+    border-bottom: 2px solid var(--primary-Color);
+}
+
+.heading h1 span {
+    font-family: 'Macondo', cursive;
+    font-weight: bold;
+    color: var(--primary-Color);
+}
+
+/* Login Form Body */
+.loginFieldset {
+    padding: 10px 0px;
+    color: var(--text-Color-Medium);
+    display: flex;
+    flex-direction: column;
+}
+
+.loginFieldset label {
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-family: 'K2D', sans-serif;
+    margin-top: 10px !important;
+}
+
+.loginFieldset .inputType {
+    display: block;
+    width: 100%;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    display: flex;
+    margin: 4px 0px 0px 0px;
+}
+
+#loginEmail {
+    width: 100%;
+}
+
+.inputType input {
+    width: 90%;
+    border: none;
+    outline: none;
+    padding: 10px 6px;
+    font-size: 1.65rem;
+    font-family: 'Varela Round', sans-serif;
+    background-color: transparent;
+    color: var(--text-Color-Medium);
+}
+
+.inputType input::placeholder {
+    color: #cccccc;
+}
+
+.inputType span {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #cccccc;
+    font-size: 1.4rem;
+}
+
+.inputType:has(input:focus) {
+    box-shadow: 0px 0px 8px var(--primary-Color);
+}
+
+/* for Email and Password Message */
+.emailMessage,
+.passwordMessage {
+    font-size: 1.5rem;
+    font-family: 'K2D', sans-serif;
+    color: #ff2a23;
+}
+
+/* For Login Button */
+.logInBtn {
+    width: 100%;
+    border: none;
+    padding: 8px 0px;
+    font-size: 2rem;
+    font-family: 'Tsukimi Rounded', sans-serif;
+    font-weight: bold;
+    background-color: rgba(34, 226, 162, 0.7);
+    color: var(--text-Color-Light);
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.logInBtn:hover {
+    background-color: rgba(34, 226, 162, 0.8);
+    transition: 0.2s;
+}
+
+/* For Forget Button */
+.forgetPassBtn {
+    width: 100%;
+    border: none;
+    padding: 8px 20px;
+    font-size: 1.8rem;
+    font-family: 'K2D', sans-serif;
+    font-weight: bold;
+    background-color: rgba(34, 226, 162, 0.2);
+    color: var(--text-Color-Light);
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.forgetPassBtn:hover {
+    background-color: rgba(34, 226, 162, 0.3);
+    transition: 0.2s;
+}
+
+/* For Account Creation Link */
+.creationAccount {
+    font-size: 1.7rem;
+    font-family: 'K2D', sans-serif;
+    margin-top: 30px;
+}
+
+.creationAccount a {
+    color: var(--primary-Color);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.creationAccount a:hover {
+    text-decoration: underline;
+}
+
+
+/* Create Account Modal */
+.createAccountModal {
+    width: 600px;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    border-radius: 5px;
+    border: 2px solid var(--primary-Color);
+    padding: 10px 20px;
+    position: absolute;
+    z-index: 20;
+    transform: translateY(-110%);
+    transition: all 0.5s ease-in-out;
+}
+
+/* For Cancel Button */
+.cancelBtn {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    background-color: transparent;
+    color: var(--text-Color-Light);
+    padding: 0px 10px;
+    border: none;
+    outline: none;
+    font-size: 2.4rem;
+}
+
+.cancelBtn i:hover {
+    rotate: 360deg;
+    transition: 0.5s ease;
+}
+
+/* Create Account Header */
+.createAccountModal .signUpHeader {
+    width: 100%;
+    color: var(--text-Color-Light);
+}
+
+.signUpHeader .crteAcntlogo {
+    width: 100%;
+    text-align: center;
+    padding: 5px 0px;
+}
+
+.crteAcntlogo i {
+    font-size: 3rem;
+}
+
+.signUpHeader .crteAcntHd {
+    width: 100%;
+    text-align: center;
+}
+
+.crteAcntHd h1 {
+    font-size: 3.4rem;
+    font-family: 'K2D', sans-serif;
+}
+
+.crteAcntHd h1 span {
+    font-family: 'Macondo', cursive;
+    font-weight: bold;
+    color: var(--primary-Color);
+}
+
+.signUpHeader .crteAcntHeading {
+    width: 100%;
+    text-align: center;
+}
+
+.crteAcntHeading h1 {
+    font-size: 2.6rem;
+    font-family: 'K2D', sans-serif;
+    padding: 5px 0px;
+    border-bottom: 2px solid var(--primary-Color);
+}
+
+/* Create Account Body */
+.signUpFieldset {
+    padding: 20px 0px;
+    color: var(--text-Color-Medium);
+    display: flex;
+    flex-direction: column;
+}
+
+/* For Signup Name */
+.forName {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.forName input {
+    width: 48%;
+    border: none;
+    outline: none;
+    padding: 8px 6px;
+    font-size: 1.6rem;
+    font-family: 'Varela Round', sans-serif;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-Color-Medium);
+    border-radius: 5px;
+}
+
+.forName input::placeholder {
+    font-family: 'Varela Round', sans-serif;
+    color: #cccccc;
+}
+
+.forName input:focus {
+    box-shadow: 0px 0px 8px var(--primary-Color);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* For Signup Email */
+.forEmail {
+    width: 100%;
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.forEmail input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 8px 6px;
+    font-size: 1.6rem;
+    font-family: 'Varela Round', sans-serif;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-Color-Medium);
+    border-radius: 5px;
+}
+
+.forEmail input::placeholder {
+    font-family: 'Varela Round', sans-serif;
+    color: #cccccc;
+}
+
+.forEmail input:focus {
+    box-shadow: 0px 0px 8px var(--primary-Color);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* For Signup Phone Number */
+.forPhone {
+    width: 100%;
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.forPhone input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 8px 6px;
+    font-size: 1.6rem;
+    font-family: 'Varela Round', sans-serif;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-Color-Medium);
+    border-radius: 5px;
+}
+
+.forPhone input::placeholder {
+    font-family: 'Varela Round', sans-serif;
+    color: #cccccc;
+}
+
+.forPhone input:focus {
+    box-shadow: 0px 0px 8px var(--primary-Color);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.forPhone input::-webkit-inner-spin-button,
+.forPhone input::-webkit-outer-spin-button {
+    display: none;
+}
+
+/* For Signup Password */
+.forPassword {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.forPassword .signUpPass {
+    width: 48%;
+    display: flex;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.signUpPass input {
+    width: 90%;
+    border: none;
+    outline: none;
+    padding: 8px 6px;
+    font-size: 1.6rem;
+    font-family: 'Varela Round', sans-serif;
+    background-color: transparent;
+    color: var(--text-Color-Medium);
+    border-radius: 5px;
+}
+
+.signUpPass input::placeholder {
+    font-family: 'Varela Round', sans-serif;
+    color: #cccccc;
+}
+
+.signUpPass:has(input:focus) {
+    box-shadow: 0px 0px 8px var(--primary-Color);
+}
+
+.signUpPass span {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* For Signup Date Of Birth */
+.forDateOfBirth {
+    width: 100%;
+    display: flex;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.forDateOfBirth label {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-family: 'K2D', sans-serif;
+}
+
+.forDateOfBirth input {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 8px 6px;
+    font-size: 1.6rem;
+    font-family: 'Varela Round', sans-serif;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-Color-Medium);
+    border-radius: 5px;
+}
+
+.forDateOfBirth input::placeholder {
+    font-family: 'Varela Round', sans-serif;
+    color: #cccccc;
+}
+
+.forDateOfBirth input:focus {
+    box-shadow: 0px 0px 8px var(--primary-Color);
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+
+/* For Signup Gender */
+.forGender {
+    width: 100%;
+    display: flex;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.forGender label {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    font-family: 'K2D', sans-serif;
+}
+
+.forGender .gender {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0px;
+    font-family: 'Varela Round', sans-serif;
+    background-color: rgba(255, 255, 255, 0);
+    color: var(--text-Color-Medium);
+    border-radius: 5px;
+}
+
+.gender label {
+    margin-right: 40%;
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.gender input[type='radio']:checked {
+    accent-color: var(--primary-Color);
+    transform: scale(1.4);
+    transition: 0.2s;
+}
+
+.signUpBtn {
+    width: 100%;
+    border: none;
+    padding: 8px 0px;
+    font-size: 2rem;
+    font-family: 'Tsukimi Rounded', sans-serif;
+    font-weight: bold;
+    background-color: rgba(34, 226, 162, 0.7);
+    color: var(--text-Color-Light);
+    border-radius: 5px;
+}
+
+.signUpBtn:hover {
+    background-color: rgba(34, 226, 162, 0.8);
+    transition: 0.2s;
+}
+
+
+/* For Hidden Class */
+.hide {
+    display: none;
+}
