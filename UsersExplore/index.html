@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postmate</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../Dashboard/style.css">
+
+    <!-- CSS Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+    <!-- Font-Awesome-Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- BoxIcons  -->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+</head>
+
+<body>
+    <!-- For Header -->
+    <header id="header">
+        <div class="head row g-0">
+
+            <div class="logo col-4">
+                <i class="fa-solid fa-dove fa-shake"></i>
+                <h2 class="m-0">Postmate</h2>
+            </div>
+
+            <div class="search col-4">
+                <div class="searchBar">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search Postmate" class="srchInput">
+                </div>
+            </div>
+
+            <div class="account col-4">
+                <a href="../Dashboard/index.html">
+                    <button type="button" class="homePageBtn">
+                        <i class="fa-solid fa-house"></i>
+                    </button>
+                </a>
+                <a href="#">
+                    <button type="button" class="notificationBtn">
+                        <i class="fa-solid fa-bell"></i>
+                    </button>
+                </a>
+                <button type="button" class="profileBtn">
+                    <div class="profileIconImg" onclick="showDropdown()">
+                        <img src="../Assets/Avatar.jpg" alt="">
+                    </div>
+                    <div class="profileBtnDropdown hide">
+                        <a href="#" class="accountLink profile">
+                            <i class="fa-solid fa-user"></i>
+                            Profile
+                        </a>
+                        <a href="#" class="accountLink settings">
+                            <i class="fa-solid fa-gear"></i>
+                            Settings
+                        </a>
+                        <a href="#" class="accountLink logOut">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Logout
+                        </a>
+                    </div>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+
+    <div class="mainCont container">
+        <!-- Postmate Users -->
+        <div class="row g-0 postmateUsers">
+            <!-- <div class="col p-0 userCard">
+                <div class="card" style="width: 18rem;">
+                    <img src="../Assets/users.png" class="card-img-top" alt="user">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                            the
+                            card's content.</p>
+                        <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+
+    <script src="app.js"></script>
+    <script type="module" src="./userExplore.js"></script>
+</body>
+
+</html>

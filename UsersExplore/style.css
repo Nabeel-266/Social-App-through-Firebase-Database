@@ -1,0 +1,74 @@
+:root {
+    --primary-Color: #00e699;
+    --secondary-Color: #999999;
+    --bg-Theme: #f5f5f5;
+    --bg-Items: #ffffff;
+    --bg-Items-Light: #e7e7e7;
+    --bg-Items-Dark: #494949;
+    --bg-Items-Opacity: rgba(255, 255, 255, 0.9);
+    --text-Color-Dark: #404040;
+    --text-Color-Medium: #606060;
+    --text-Color-Light: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 10px;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    position: relative;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    position: absolute;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-Theme);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--text-Color-Dark);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+/* For Add Home Page Button in Header */
+.homePageBtn {
+    padding: 5px 8px 2px 8px;
+    border-radius: 100%;
+    color: var(--text-Color-Medium);
+    border: none;
+    background-color: var(--bg-Items-Light);
+    font-size: 1.7rem;
+    box-shadow: 0px 0px 5px #dddddd;
+}
+
+.homePageBtn:hover {
+    transition: 0.3s ease;
+    color: var(--bg-Items);
+    background-color: var(--bg-Items-Dark);
+    box-shadow: 0px 0px 5px var(--bg-Items-Dark);
+}
+
+.mainCont {
+    margin-top: 8vh;
+    display: flex;
+    align-items: flex-end;
+}
+
+.mainCont .postmateUsers {
+    /* background-color: darkcyan; */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding: 20px 0px;
+}
