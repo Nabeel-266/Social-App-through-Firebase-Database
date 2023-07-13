@@ -1,28 +1,13 @@
-//        ------------------------- For Firebase ------------------------- 
+// Import Functions From firebase Configuration File 
+import {
+    auth,
+    db,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    setDoc,
+    doc
+} from './Firebase-Configuration/firebaseConfig.js';
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js';
-// Import Authentication of Firebase
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
-// Import Firestore Database of Firebase
-import { getFirestore, collection, addDoc, setDoc, doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyDyQQzrrye6T_qvcd7dUFwA6q4jESHBsl0",
-    authDomain: "postmate-social-application.firebaseapp.com",
-    projectId: "postmate-social-application",
-    storageBucket: "postmate-social-application.appspot.com",
-    messagingSenderId: "847480270284",
-    appId: "1:847480270284:web:237dc3ae12b9c6e05bc169"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-// Initialize Firebase Authentication and get a reference to the service
-const auth = getAuth(app);
-// Initialize Firebase Firestore Database and get a reference to the service
-const db = getFirestore(app);
 
 
 // For Signup User
@@ -89,6 +74,11 @@ async function addUserDetails(userID) {
     }
 }
 
+const loginState = JSON.parse(localStorage.getItem("login-State"));
+if (loginState) {
+    window.location.href = "./Dashboard/dashboard.html";
+}
+
 
 // For Login User
 const loginButton = document.querySelector('.logInBtn');
@@ -102,7 +92,11 @@ async function loginUser() {
         const response = await signInWithEmailAndPassword(auth, loginEmail.value, loginPassword.value);
         const userFind = response.user;
         if (userFind) {
-            window.location.href = "./Dashboard/index.html";
+            window.location.href = "./Dashboard/dashboard.html";
+            const state = {
+                login: true,
+            }
+            localStorage.setItem("login-State", JSON.stringify(state));
         }
     }
     catch (error) {
@@ -124,3 +118,4 @@ async function loginUser() {
         }
     }
 }
+
