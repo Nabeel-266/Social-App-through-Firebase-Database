@@ -1,7 +1,7 @@
-:root{
+:root {
     --primary-Color: #00e699;
     --secondary-Color: #999999;
-    --bg-Theme: #f5f5f5;
+    --bg-Theme: #eeeeee;
     --bg-Items: #ffffff;
     --bg-Items-Light: #e7e7e7;
     --bg-Items-Dark: #494949;
@@ -11,34 +11,38 @@
     --text-Color-Light: #ffffff;
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-html{
+
+html {
     font-size: 10px;
 }
-body{
+
+body {
     font-family: 'Poppins', sans-serif;
     position: relative;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
     width: 10px;
     position: absolute;
 }
-::-webkit-scrollbar-track{
+
+::-webkit-scrollbar-track {
     background: var(--bg-Theme);
 }
-::-webkit-scrollbar-thumb{
+
+::-webkit-scrollbar-thumb {
     background: var(--text-Color-Dark);
     border-radius: 12px;
     transition: all 0.3s ease;
 }
 
 /* For Add Home Page Button in Header */
-.homePageBtn{
+.homePageBtn {
     padding: 5px 8px 2px 8px;
     border-radius: 100%;
     color: var(--text-Color-Medium);
@@ -47,21 +51,21 @@ body{
     font-size: 1.7rem;
     box-shadow: 0px 0px 5px #dddddd;
 }
-.homePageBtn:hover{
+
+.homePageBtn:hover {
     transition: 0.3s ease;
     color: var(--bg-Items);
     background-color: var(--bg-Items-Dark);
     box-shadow: 0px 0px 5px var(--bg-Items-Dark);
 }
 
-.mainCont{
-    /* height: 100vh; */
-    /* background-color: #00e699; */
+.mainCont {
+    min-height: 100vh;
     background-color: var(--bg-Theme);
 }
-.mainCont .profile{
+
+.mainCont .profile {
     width: 100%;
-    /* background-color: var(--bg-Items); */
     padding-top: 8vh !important;
     display: flex;
     flex-direction: column;
@@ -69,12 +73,12 @@ body{
     align-items: center;
 }
 
-.upperProfileArea{
+.upperProfileArea {
     width: 100%;
     position: relative;
 }
 
-.upperProfileArea .profileCoverImage{
+.upperProfileArea .profileCoverImage {
     width: 100%;
     height: 30vh;
     background-color: var(--bg-Items-Dark);
@@ -84,19 +88,21 @@ body{
     justify-content: space-between;
     align-items: flex-end;
 }
-.profileCoverImage p{
+
+.profileCoverImage p {
     font-size: 2rem;
     color: var(--text-Color-Light);
     font-family: 'Poppins', sans-serif;
 }
-.profileCoverImage p span{
+
+.profileCoverImage p span {
     color: var(--primary-Color);
 }
 
-.upperProfileArea .profilePictureImage{
-    width: 150px;
-    height: 150px;
-    background-color: #00e699;
+.upperProfileArea .profilePictureImage {
+    width: 140px;
+    height: 140px;
+    background-color: var(--bg-Items);
     position: absolute;
     top: 50%;
     left: 50%;
@@ -104,13 +110,44 @@ body{
     border-radius: 100%;
     border: 4px solid var(--bg-Items-Dark);
     overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 }
-.profilePictureImage img{
+
+.profilePictureImage img {
+    width: 110%;
+    object-fit: cover;
+}
+
+.upperProfileArea .editUserImage {
+    position: absolute;
+    top: 60%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    overflow: hidden;
+    border: 2px solid var(--text-Color-Medium);
+}
+
+.editUserImage button {
     width: 100%;
+    height: 100%;
+    background-color: var(--secondary-Color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
 }
 
+.editUserImage button i {
+    font-size: 2rem;
+    color: var(--bg-Items);
+}
 
-.upperProfileArea .profileContentArea{
+.upperProfileArea .profileContentArea {
     width: 100%;
     /* background-color: lightcoral; */
     display: flex;
@@ -118,18 +155,20 @@ body{
     justify-content: center;
     align-items: center;
 }
-.profileContentArea .userProfileName{
+
+.profileContentArea .userProfileName {
     width: 100%;
-    padding: 60px 0px;
+    padding: 60px 0px 40px 0px;
     text-align: center;
 }
-.userProfileName h2{
+
+.userProfileName h2 {
     font-size: 3.8rem;
     font-weight: 600;
     font-family: 'Poppins', sans-serif;
 }
 
-.midPostArea{
+.midPostArea {
     width: 55%;
     /* background-color: #00e699; */
     display: flex;
@@ -138,12 +177,124 @@ body{
     margin-bottom: 50px;
 }
 
-.midPostArea .posting{
+.midPostArea .posting {
     background-color: var(--bg-Items-Dark);
     padding: 5px 10px;
     border-radius: 8px;
 }
 
-.midPostArea .postsArea{
+.midPostArea .postsArea {
     gap: 20px;
+}
+
+
+.changeProfilePictureModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 500px;
+    /* height: 400px; */
+    border-radius: 8px;
+    background-color: var(--bg-Items);
+    padding: 0px 20px 20px 20px;
+}
+
+.changeProfilePictureModal .upperHeading {
+    width: 100%;
+    padding: 14px 0px;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-bottom: 2px solid var(--bg-Items-Dark);
+}
+
+.upperHeading h2 {
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: var(--text-Color-Dark);
+}
+
+.upperHeading .closeChangeProfilePictureModalBtn {
+    position: absolute;
+    right: 0px;
+    border: none;
+    padding: 0px 9px;
+    font-size: 2.2rem;
+    border-radius: 100%;
+    color: #eeeeee;
+    background-color: rgba(100, 100, 100, 0.9);
+}
+
+.changeProfilePictureModal .profilePicDisplay {
+    width: 100%;
+    max-height: 200px;
+    /* background-color: #00e699; */
+    overflow: auto;
+    position: relative;
+}
+
+.profilePicDisplay .selectedProfilePic {
+    width: 100%;
+}
+
+.selectedProfilePic .cancelProfilePicBtn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: none;
+    padding: 0px 9px;
+    font-size: 2.2rem;
+    font-weight: bold;
+    border-radius: 100%;
+    color: var(--text-Color-Dark);
+    background-color: var(--bg-Items);
+}
+
+.selectedProfilePic img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.changeProfilePictureModal .uploadPictureInputArea {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.uploadPictureInputArea label {
+    width: 100%;
+    padding: 10px 0px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    background-color: var(--bg-Items-Dark);
+    color: var(--text-Color-Light);
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.uploadPictureInputArea input {
+    display: none;
+}
+
+.changeProfilePictureModal .saveProfilePicArea {
+    padding: 10px 10px 0px 0px;
+    border-top: 2px solid var(--bg-Items-Dark);
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.saveProfilePicArea .savePhotoBtn {
+    border: 2px solid var(--secondary-Color);
+    color: var(--bg-Items);
+    background-color: var(--bg-Items-Dark);
+    padding: 3px 20px;
+    border-radius: 4px;
+    font-size: 1.8rem;
+    font-weight: 600;
 }

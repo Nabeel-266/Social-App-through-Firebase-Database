@@ -52,7 +52,7 @@
                 </a>
                 <button type="button" class="profileBtn">
                     <div class="profileIconImg" onclick="showDropdown()">
-                        <img src="../Assets/Avatar.jpg" alt="">
+                        <img src="../Assets/users.png" alt="" class="userImage">
                     </div>
                     <div class="profileBtnDropdown hide">
                         <a href="#" class="accountLink profile">
@@ -82,7 +82,10 @@
                     <p class="following m-0"><span>0</span> following</p>
                 </div>
                 <div class="profilePictureImage">
-                    <img src="../Assets/Avatar.jpg" alt="User-Image">
+                    <img src="../Assets/users.png" alt="User-Image" class="userImage">
+                </div>
+                <div class="editUserImage">
+                    <button class="editUserPicBtn"><i class="fa-solid fa-camera"></i></button>
                 </div>
                 <div class="profileContentArea col-12">
                     <div class="userProfileName">
@@ -95,7 +98,7 @@
                 <section class="posting row g-0">
                     <div class="upperSection col-12">
                         <div class="userImg">
-                            <img src="../Assets/Avatar.jpg" alt="User-Image">
+                            <img src="../Assets/users.png" alt="User-Image" class="userImage">
                         </div>
                         <div class="postInputArea">
                             <input type="text" class="postInput" onclick="postModalOpen()" readonly>
@@ -200,7 +203,7 @@
 
             <div class="modalPostUser">
                 <div class="modalPostUserImage">
-                    <img src="../Assets/Avatar.jpg" alt="User_Image">
+                    <img src="../Assets/users.png" alt="User_Image" class="userImage">
                 </div>
                 <div class="modalPostUserName">
                     <h3 class="m-0 modalUserName"></h3>
@@ -216,7 +219,6 @@
                             <i class="fa-solid fa-xmark"></i>
                         </button>
                         <img src="" alt="" id="postImageDisplay" class="img-fluid hide">
-                        <video src="" id="postVideoDisplay" class="hide" controls></video>
                     </div>
                 </div>
                 <div class="addEmoji">
@@ -248,7 +250,35 @@
                 </div>
             </div>
 
-            <button class="postingBtn" onclick="postCreation()">Post</button>
+            <button class="postingBtn">Post</button>
+        </section>
+
+
+        <section class="changeProfilePictureModal hide">
+            <div class="upperHeading">
+                <h2 class="m-0">Upload Profile Picture</h2>
+                <button type="button" class="closeChangeProfilePictureModalBtn">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="profilePicDisplay">
+                <div class="selectedProfilePic hide">
+                    <button type="button" class="cancelProfilePicBtn">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                    <img src="" alt="" id="profilePicture" class="img-fluid">
+                </div>
+            </div>
+
+            <div class="uploadPictureInputArea">
+                <label for="uploadPicture"><i class="fa-solid fa-upload"></i>&nbsp; Upload Photo</label>
+                <input type="file" accept=".jpg, .jpeg, .png" id="uploadPicture">
+            </div>
+
+            <div class="saveProfilePicArea hide">
+                <button type="submit" class="savePhotoBtn">Save</button>
+            </div>
         </section>
 
     </div>
@@ -256,6 +286,7 @@
 
 
     <script src="./profile.js"></script>
+    <script type="module" src="./profile-firebase.js"></script>
 </body>
 
 </html>

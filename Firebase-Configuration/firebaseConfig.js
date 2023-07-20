@@ -21,7 +21,16 @@ import {
     doc,
     getDocs,
     getDoc,
+    where,
+    query
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+import {
+    getStorage,
+    ref,
+    uploadBytesResumable,
+    getDownloadURL
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -42,6 +51,9 @@ const auth = getAuth(app);
 // Initialize Firebase Firestore Database and get a reference to the service
 const db = getFirestore(app);
 
+// Initialize Firebase Storage and get a reference to the service
+const storage = getStorage(app);
+
 let loginState;
 
 
@@ -53,11 +65,16 @@ export {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     onAuthStateChanged,
-    collection,
+    signOut,
+    doc,
     addDoc,
     setDoc,
-    doc,
+    collection,
     getDocs,
-    signOut,
-    getDoc
+    getDoc,
+    query,
+    storage,
+    ref,
+    uploadBytesResumable,
+    getDownloadURL
 }
