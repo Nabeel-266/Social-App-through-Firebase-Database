@@ -18,6 +18,18 @@ import {
 } from '../Firebase-Configuration/firebaseConfig.js';
 
 
+// For Loader
+const loaderArea = document.querySelector(".loaderArea");
+setTimeout(() => {
+    loaderArea.classList.add("hide");
+}, 4000)
+
+
+// Get all previous posts
+const postsArea = document.querySelector('.postsArea');
+getAllMyPosts();
+
+
 // Get Current Login User ID
 onAuthStateChanged(auth, (crntLoginUser) => {
     if (crntLoginUser) {
@@ -117,21 +129,16 @@ postCreateBtn.addEventListener('click', postCreation);
 async function postCreation() {
     // console.log(logInUserData)
     try {
-        const postInfo = {
-            authorID: logInUserId,
-            authorImage: logInUserData.profilePicture || "../Assets/user.png",
-            authorName: `${logInUserData.firstName} ${logInUserData.lastName}`,
-            authorEmail: logInUserData.email,
-            postContent: postTextArea.value,
-            postDate: new Date().toLocaleDateString(),
-            postTime: new Date().toLocaleTimeString(),
-            postImage: postImageSrc || "",
-        }
+        if (postTextArea.value !== "") {
 
-        if (postTextArea.value === "") {
-            alert(`Please! write a post first`);
-        }
-        else {
+            const postInfo = {
+                authorID: logInUserId,
+                authorName: `${logInUserData.firstName} ${logInUserData.lastName}`,
+                postContent: postTextArea.value,
+                postDate: new Date().toLocaleDateString(),
+                postTime: new Date().toLocaleTimeString(),
+                postImage: postImageSrc || "",
+            }
             // Add a new post in firestore database with a generated id.
             const postResponse = await addDoc(collection(db, "User-Posts"), postInfo);
             // console.log("Document written with ID: ", postResponse.id);
@@ -143,15 +150,15 @@ async function postCreation() {
             postImageDisplay.classList.add('hide');
             removeMediaBtn.classList.add('hide');
         }
-
-        postImageSrc = '';
+        else {
+            alert(`Your post is empty`);
+        }
     }
     catch (error) {
         console.error("Error adding document: ", error);
     }
 }
 
-const postsArea = document.querySelector('.postsArea');
 
 // Get All posts of Login User
 async function getAllMyPosts() {
@@ -159,11 +166,14 @@ async function getAllMyPosts() {
 
     const q = query(collection(db, "User-Posts"));
     const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
+    querySnapshot.forEach(async (doc) => {
         // console.log(doc.id, " => ", doc.data());
 
-        const { authorID, authorImage, authorName, authorEmail, postContent, postDate, postTime, postImage } = doc.data();
+        // for getting post Information
+        const { authorID, authorName, postContent, postDate, postTime, postImage } = doc.data();
+        // for getting Post Author Data
+        const postAuthorInfo = await getPostAuthorData(authorID);
+
 
         if (authorID === logInUserId) {
             const singlePost = document.createElement('div');
@@ -176,7 +186,7 @@ async function getAllMyPosts() {
 
             <div class="postAuthorDetails">
                 <div class="authorImage">
-                    <img src="${authorImage}" alt="Author-Image" class="userImage">
+                    <img src="${postAuthorInfo?.profilePicture || "../Assets/users.png"}" alt="Author-Image" class="userImage">
                 </div>
                 <div class="authorDetail">
                     <h3 class="authorName m-0">${authorName}</h3>
@@ -234,8 +244,24 @@ async function getAllMyPosts() {
 
 };
 
-// Get all previous posts
-getAllMyPosts();
+// for getting Post Author Data
+async function getPostAuthorData(authorID) {
+    try {
+        const docRef = doc(db, "Postmate-Users", authorID);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            // console.log("Document data:", docSnap.data());
+            return docSnap.data();
+        }
+        else {
+            // docSnap.data() will be undefined in this case
+            console.log("Sorry! don't find your post author data");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
 
 
 const editUserProfilePictureBtn = document.querySelector(".editUserPicBtn");

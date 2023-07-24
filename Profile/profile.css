@@ -81,7 +81,10 @@ body {
 .upperProfileArea .profileCoverImage {
     width: 100%;
     height: 30vh;
-    background-color: var(--bg-Items-Dark);
+    /* background-color: var(--bg-Items-Dark); */
+    background: url("../Assets/Cover-Photo.jpg") center/cover no-repeat;
+    /* filter: grayscale(1); */
+    object-fit: cover;
     border-radius: 0px 0px 8px 8px;
     padding: 4px 20px !important;
     display: flex;
@@ -135,11 +138,13 @@ body {
 .editUserImage button {
     width: 100%;
     height: 100%;
-    background-color: var(--secondary-Color);
+    background-color: var(--text-Color-Medium);
+    outline: none;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: none;
+    border: 2px solid var(--secondary-Color);
+    border-radius: 100%;
 }
 
 .editUserImage button i {

@@ -12,6 +12,13 @@ import {
 } from '../Firebase-Configuration/firebaseConfig.js';
 
 
+// For Loader
+const loaderArea = document.querySelector(".loaderArea");
+setTimeout(() => {
+    loaderArea.classList.add("hide");
+}, 5000)
+
+
 // For get all previous posts
 const postsArea = document.querySelector('.postsArea');
 getAllPosts()
@@ -119,21 +126,15 @@ postCreateBtn.addEventListener('click', postCreation);
 async function postCreation() {
     // console.log(logInUserData)
     try {
-        const postInfo = {
-            authorID: logInUserId,
-            authorImage: logInUserData.profilePicture || "../Assets/users.png",
-            authorName: `${logInUserData.firstName} ${logInUserData.lastName}`,
-            authorEmail: logInUserData.email,
-            postContent: postTextArea.value,
-            postDate: new Date().toLocaleDateString(),
-            postTime: new Date().toLocaleTimeString(),
-            postImage: postImageSrc || "",
-        }
-
-        if (postTextArea.value === "") {
-            alert(`Please! write a post first`);
-        }
-        else {
+        if (postTextArea.value !== "") {
+            const postInfo = {
+                authorID: logInUserId,
+                authorName: `${logInUserData.firstName} ${logInUserData.lastName}`,
+                postContent: postTextArea.value,
+                postDate: new Date().toLocaleDateString(),
+                postTime: new Date().toLocaleTimeString(),
+                postImage: postImageSrc || "",
+            }
             // Add a new post in firestore database with a generated id.
             const postResponse = await addDoc(collection(db, "User-Posts"), postInfo);
             // console.log("Document written with ID: ", postResponse.id);
@@ -145,8 +146,9 @@ async function postCreation() {
             postImageDisplay.classList.add('hide');
             removeMediaBtn.classList.add('hide');
         }
-
-        postImageSrc = '';
+        else {
+            alert(`Your post is empty`);
+        }
     }
     catch (error) {
         console.error("Error adding document: ", error);
@@ -157,11 +159,13 @@ async function postCreation() {
 async function getAllPosts() {
     postsArea.innerHTML = "";
     const querySnapshot = await getDocs(collection(db, "User-Posts"));
-    querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
+    querySnapshot.forEach(async (doc) => {
         // console.log(doc.id, " => ", doc.data());
 
-        const { authorID, authorImage, authorName, authorEmail, postContent, postDate, postTime, postImage } = doc.data();
+        // for getting post Information
+        const { authorID, authorName, postContent, postDate, postTime, postImage } = doc.data();
+        // for getting Post Author Data
+        const postAuthorInfo = await getPostAuthorData(authorID);
 
         const singlePost = document.createElement('div');
         singlePost.setAttribute('class', 'post col-12');
@@ -173,7 +177,7 @@ async function getAllPosts() {
 
         <div class="postAuthorDetails">
             <div class="authorImage">
-                <img src="${authorImage}" alt="Author-Image" class="userImage">
+                <img src="${postAuthorInfo?.profilePicture || "../Assets/users.png"}" alt="Author-Image" class="userImage">
             </div>
             <div class="authorDetail">
                 <h3 class="authorName m-0">${authorName}</h3>
@@ -226,3 +230,22 @@ async function getAllPosts() {
 
     })
 };
+
+// for getting Post Author Data
+async function getPostAuthorData(authorID) {
+    try {
+        const docRef = doc(db, "Postmate-Users", authorID);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            // console.log("Document data:", docSnap.data());
+            return docSnap.data();
+        }
+        else {
+            // docSnap.data() will be undefined in this case
+            console.log("Sorry! don't find your post author data");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
