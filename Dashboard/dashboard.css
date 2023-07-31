@@ -622,23 +622,14 @@ body {
     position: relative;
 }
 
-.post .postSaveOrDeleteBtn {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    font-size: 2.2rem;
-    color: var(--text-Color-Dark);
-}
-
 .post .postAuthorDetails {
     width: 100%;
     height: 60px;
     padding: 0px 15px;
     display: flex;
     align-items: center;
+    position: relative;
+    /* background-color: #00e699; */
 }
 
 .postAuthorDetails .authorImage {
@@ -685,6 +676,63 @@ body {
     letter-spacing: 0.5px;
     color: var(--text-Color-Medium);
 }
+
+.postAuthorDetails .editDeleteSaveButtons {
+    width: 10%;
+    height: 100%;
+    position: absolute;
+    top: 0%;
+    right: 0%;
+    /* background-color: lightcoral; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.editDeleteSaveButtons .ellipsis {
+    padding: 0px 6px !important;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 2.4rem;
+    color: var(--text-Color-Dark);
+    border-radius: 100%;
+    margin-bottom: 12% !important;
+}
+
+.editDeleteSaveButtons .editDeleteSaveBtnsArea{
+    position: absolute;
+    top: 70%;
+    right: 0;
+    width: 300% !important;
+    padding: 5px 4px;
+    background-color: var(--bg-Items-Dark);
+    display: flex;
+    flex-direction: column;
+    border-radius: 6px;
+}
+
+.editPost, .savePost, .deletePost{
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 8px 8px;
+    font-size: 1.7rem;
+    font-weight: 500;
+    text-align: left;
+    color: var(--text-Color-Light);
+    border-radius: 4px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    transition: 0.2s;
+}
+
+.editPost:hover, .savePost:hover, .deletePost:hover{
+    background-color: var(--text-Color-Medium);
+    /* color: var(--text-Color-Dark); */
+}
+
 
 .post .postContent {
     width: 100%;
