@@ -21,6 +21,7 @@ import {
   doc,
   getDocs,
   getDoc,
+  updateDoc,
   where,
   query,
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
@@ -76,4 +77,5 @@ export {
   ref,
   uploadBytesResumable,
   getDownloadURL,
+  updateDoc
 };

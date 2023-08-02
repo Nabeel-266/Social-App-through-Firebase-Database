@@ -743,7 +743,7 @@ body {
     border-top: 1px solid rgba(200, 200, 200);
 }
 
-.postContent .postTextArea {
+.postContent .postTextContentArea {
     width: 100%;
     padding: 10px 20px;
     display: flex;
@@ -753,7 +753,7 @@ body {
     /* background-color: lightgoldenrodyellow; */
 }
 
-.postTextArea .postText {
+.postTextContentArea .postText {
     font-size: 1.4rem;
 }
 

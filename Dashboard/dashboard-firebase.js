@@ -4,9 +4,10 @@ import {
   db,
   onAuthStateChanged,
   signOut,
+  doc,
   getDoc,
   getDocs,
-  doc,
+  updateDoc,
   collection,
   addDoc,
   storage,
@@ -16,10 +17,10 @@ import {
 } from "../Firebase-Configuration/firebaseConfig.js";
 
 // For Loader
-const loaderArea = document.querySelector(".loaderArea");
-setTimeout(() => {
-  loaderArea.classList.add("hide");
-}, 5000);
+// const loaderArea = document.querySelector(".loaderArea");
+// setTimeout(() => {
+//   loaderArea.classList.add("hide");
+// }, 5000);
 
 // For get all previous posts
 const postsArea = document.querySelector(".postsArea");
@@ -53,6 +54,7 @@ async function getlogInUserData(uid) {
       // console.log("Login User Data:", docSnap.data());
       logInUserData = docSnap.data();
       const { firstName, lastName, email, profilePicture } = docSnap.data();
+      logInUserName = `${firstName} ${lastName}`;
 
       userName.innerText = `${firstName} ${lastName}`;
       userEmail.innerText = `${email}`;
@@ -100,6 +102,7 @@ uploadPostImageInput.addEventListener("change", () => {
   postImageDisplay.classList.remove("hide");
   removeMediaBtn.classList.remove("hide");
   reader.readAsDataURL(file);
+  editPostImageState = true;
 });
 
 // For Cancel Selected Image Btn in Post Modal Image Area
@@ -107,6 +110,8 @@ removeMediaBtn.addEventListener("click", () => {
   postImageDisplay.src = "";
   postImageDisplay.classList.add("hide");
   removeMediaBtn.classList.add("hide");
+  uploadPostImageInput.value = "";
+  editPostImageState = false;
 });
 
 const postCreateBtn = document.querySelector(".postingBtn");
@@ -117,111 +122,181 @@ const postingModal = document.querySelector(".postingModal");
 // Login User Data & User Id
 let logInUserId;
 let logInUserData;
+let logInUserName;
 
 postCreateBtn.addEventListener("click", postCreation);
 async function postCreation() {
-  if (postTextArea.value !== "") {
-    // check if user create without image post so working "if block" 
-    if (!uploadPostImageInput.value) {
-      try {
-        const postInfo = {
-          authorID: logInUserId,
-          authorName: `${logInUserData.firstName} ${logInUserData.lastName}`,
-          postContent: postTextArea.value,
-          postDate: new Date().toLocaleDateString(),
-          postTime: new Date().toLocaleTimeString()
-        };
-        // Add a new post in firestore database with a generated id.
-        const postResponse = await addDoc(collection(db, "User-Posts"), postInfo);
-        // console.log("Document written with ID: ", postResponse.id);
-        postTextArea.value = "";
-        getAllPosts();
-      } 
-      catch (error) {
-        console.error("Error adding document: ", error);
-      }
-    } 
-    // check if user create a image post so working "else block" 
-    else {
-      const file = uploadPostImageInput.files[0];
-  
-      // Create the file metadata
-      /** @type {any} */
-      const metadata = {
-        contentType: "image/jpeg",
+  console.log(uploadPostImageInput.value)
+  // check if user create only text post so working "if block" 
+  if (postTextArea.value !== "" && uploadPostImageInput.value === "") {
+    try {
+      const postInfo = {
+        authorID: logInUserId,
+        authorName: `${logInUserData.firstName} ${logInUserData.lastName}`,
+        postContent: postTextArea.value,
+        postDate: new Date().toLocaleDateString(),
+        postTime: new Date().toLocaleTimeString()
       };
-  
-      // Upload file and metadata to the object 'images/mountains.jpg'
-      const storageRef = ref(storage, "Post-Images/" + file.name);
-      const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-  
-      // Listen for state changes, errors, and completion of the upload.
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          console.log("Upload is " + progress + "% done");
-          switch (snapshot.state) {
-            case "paused":
-              console.log("Upload is paused");
-              break;
-            case "running":
-              console.log("Upload is running");
-              break;
-          }
-        },
-        (error) => {
-          switch (error.code) {
-            case "storage/unauthorized":
-              // User doesn't have permission to access the object
-              console.log("User doesn't have permission to access the object");
-              break;
-            case "storage/canceled":
-              // User canceled the upload
-              console.log("User canceled the upload");
-              break;
-  
-            case "storage/unknown":
-              // Unknown error occurred, inspect error.serverResponse
-              console.log("Unknown error occurred, inspect error.serverResponse");
-              break;
-          }
-        },
-        () => {
-          // Upload completed successfully, now we can get the download URL
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            console.log("File available at", downloadURL);
-            try {
-              const response = await addDoc(collection(db, "User-Posts"), {
-                authorID: logInUserId,
-                authorName: `${logInUserData.firstName} ${logInUserData.lastName}`,
-                postContent: postTextArea.value,
-                postDate: new Date().toLocaleDateString(),
-                postTime: new Date().toLocaleTimeString(),
-                postImage: downloadURL,
-              });
-              postTextArea.value = "";
-              getAllPosts();
-            } 
-            catch (error) {
-              console.error("Error adding document: ", error);
-            }
-          });
-        }
-      )
-    };
-    
-    overlay.classList.add("hide");
-    postingModal.classList.add("hide");
-    postImageDisplay.classList.add("hide");
-    removeMediaBtn.classList.add("hide");
-    uploadPostImageInput.value = "";
+      // Add a new post in firestore database with a generated id.
+      const postResponse = await addDoc(collection(db, "User-Posts"), postInfo);
+      // console.log("Document written with ID: ", postResponse.id);
+      postTextArea.value = "";
+      getAllPosts();
+    } 
+    catch (error) {
+      console.error("Error adding document: ", error);
+    }
   } 
-  else {
-    alert(`Your post is empty`);
+  // check if user create only image post so working "else if block" 
+  else if(postTextArea.value === "" && uploadPostImageInput.value !== "") {
+    const file = uploadPostImageInput.files[0];
+
+    // Create the file metadata
+    /** @type {any} */
+    const metadata = {
+      contentType: "image/jpeg",
+    };
+
+    // Upload file and metadata to the object 'images/mountains.jpg'
+    const storageRef = ref(storage, "Post-Images/" + file.name);
+    const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        switch (error.code) {
+          case "storage/unauthorized":
+            // User doesn't have permission to access the object
+            console.log("User doesn't have permission to access the object");
+            break;
+          case "storage/canceled":
+            // User canceled the upload
+            console.log("User canceled the upload");
+            break;
+
+          case "storage/unknown":
+            // Unknown error occurred, inspect error.serverResponse
+            console.log("Unknown error occurred, inspect error.serverResponse");
+            break;
+        }
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+          console.log("File available at", downloadURL);
+          try {
+            const response = await addDoc(collection(db, "User-Posts"), {
+              authorID: logInUserId,
+              authorName: `${logInUserData.firstName} ${logInUserData.lastName}`,
+              postDate: new Date().toLocaleDateString(),
+              postTime: new Date().toLocaleTimeString(),
+              postImage: downloadURL,
+            });
+            postTextArea.value = "";
+            getAllPosts();
+          } 
+          catch (error) {
+            console.error("Error adding document: ", error);
+          }
+        });
+      }
+    )
   }
+  // check if user create both text & image post so working "this if else block" 
+  else if (postTextArea.value !== "" && uploadPostImageInput.value !== "") {
+    const file = uploadPostImageInput.files[0];
+
+    // Create the file metadata
+    /** @type {any} */
+    const metadata = {
+      contentType: "image/jpeg",
+    };
+
+    // Upload file and metadata to the object 'images/mountains.jpg'
+    const storageRef = ref(storage, "Post-Images/" + file.name);
+    const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+    // Listen for state changes, errors, and completion of the upload.
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        switch (error.code) {
+          case "storage/unauthorized":
+            // User doesn't have permission to access the object
+            console.log("User doesn't have permission to access the object");
+            break;
+          case "storage/canceled":
+            // User canceled the upload
+            console.log("User canceled the upload");
+            break;
+
+          case "storage/unknown":
+            // Unknown error occurred, inspect error.serverResponse
+            console.log("Unknown error occurred, inspect error.serverResponse");
+            break;
+        }
+      },
+      () => {
+        // Upload completed successfully, now we can get the download URL
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+          console.log("File available at", downloadURL);
+          try {
+            const response = await addDoc(collection(db, "User-Posts"), {
+              authorID: logInUserId,
+              authorName: `${logInUserData.firstName} ${logInUserData.lastName}`,
+              postContent: postTextArea.value,
+              postImage: downloadURL,
+              postDate: new Date().toLocaleDateString(),
+              postTime: new Date().toLocaleTimeString(),
+            });
+            postTextArea.value = "";
+            getAllPosts();
+          } 
+          catch (error) {
+            console.error("Error adding document: ", error);
+          }
+        });
+      }
+    )
+  }
+  else {
+    alert(`Dear ${logInUserName}! Your post is empty`);
+  }
+
+  overlay.classList.add("hide");
+  postingModal.classList.add("hide");
+  postImageDisplay.classList.add("hide");
+  removeMediaBtn.classList.add("hide");
+  uploadPostImageInput.value = "";
 }
 
 // Get all posts of all users
@@ -230,7 +305,7 @@ async function getAllPosts() {
   const querySnapshot = await getDocs(collection(db, "User-Posts"));
   querySnapshot.forEach(async (doc) => {
     // console.log(doc.id, " => ", doc.data());
-    const postID = doc.id;
+    const postId = doc.id;
 
     // for getting post Information
     const { authorID, authorName, postContent, postDate, postTime, postImage } =
@@ -258,7 +333,7 @@ async function getAllPosts() {
                     <i class="fa-solid fa-ellipsis"></i>
                 </button>
                 <div class="editDeleteSaveBtnsArea hide">
-                    <button class="editPost" onclick="openPostEditModal('${postID}, ${postContent}, ${postImage}')">
+                    <button class="editPost" onclick="openPostEditModal('${postId}', '${postContent}', '${postImage}')">
                         <i class="fa-solid fa-pen"></i> 
                         Edit Post
                     </button>
@@ -275,8 +350,8 @@ async function getAllPosts() {
         </div>
 
         <div class="postContent">
-            <div class="postTextArea">
-                <p class="postText m-0">${postContent}</p>
+            <div class="postTextContentArea">
+                <p class="postText m-0">${postContent || ""}</p>
             </div>
 
             <div class="postMedia">
@@ -316,18 +391,23 @@ async function getAllPosts() {
     singlePost.innerHTML = singlePostInnerContent;
     postsArea.prepend(singlePost);
 
+    const postTextContentArea = document.querySelector(".postTextContentArea");
+    if(!postContent){
+      postTextContentArea.classList.add("hide");
+    }
+
     const ellipsis = document.querySelector(".ellipsis");
     const editDeleteSaveBtnsArea = document.querySelector(".editDeleteSaveBtnsArea");
     const editPost = document.querySelector(".editPost");
     const deletePost = document.querySelector(".deletePost");
-
+    
     ellipsis.addEventListener("click", () => {
       editDeleteSaveBtnsArea.classList.toggle("hide");
       if(authorID !== logInUserId){
         editPost.classList.add("hide");
         deletePost.classList.add("hide");
       }
-    })
+    });
 
   });
 }
@@ -341,7 +421,8 @@ async function getPostAuthorData(authorID) {
     if (docSnap.exists()) {
       // console.log("Document data:", docSnap.data());
       return docSnap.data();
-    } else {
+    } 
+    else {
       // docSnap.data() will be undefined in this case
       console.log("Sorry! don't find your post author data");
     }
@@ -355,39 +436,117 @@ const closingPostingModalBtn = document.querySelector(".closePostingModalBtn");
 const modalHeading = document.querySelector(".modalHd");
 
 function openPostEditModal(editPostId, editPostContent, editPostImage) {
-  // editPostDetails = [postId, postContent, postImage];
-  console.log(editPostId, editPostContent, editPostImage);
+  console.log(editPostImage, typeof editPostImage);
 
+  isEditPostContentAvailable = editPostContent === "undefined" ? false : true;
+  isEditPostImageAvailable = editPostImage === "undefined" ? false : true;
+  
   overlay.classList.remove("hide");
   postingModal.classList.remove("hide");
   postCreateBtn.innerText = "Save";
   modalHeading.innerText = "Edit Post"
+  selectedEditPostDetails = [editPostId, editPostContent, editPostImage];
   postCreateBtn.removeEventListener("click", postCreation);
   postCreateBtn.addEventListener("click", editPostHandler);
 
-  // postTextArea.value = editPostContent;
-  // if(editPostImage !== "undefined"){
-  //   postImageDisplay.src = editPostImage;
-  //   removeMediaBtn.classList.remove("hide");
-  // }
-  
-  // editPostFlag = true
-  // postBtn.innerText = "Update"
-  // postBtn.removeEventListener('click', postHandler)
-  // postBtn.addEventListener('click', updatePostHandler)
-  // postIdGlobal = postId
-  // // const washingtonRef = doc(db, "posts", postId);
+  if(editPostContent !== "undefined"){
+    postTextArea.value = editPostContent;
+  };
 
-  // // // Set the "capital" field of the city 'DC'
-  // // await updateDoc(washingtonRef, {
-  // //     postContent: "kuch bhi"
-  // // });
+  if(editPostImage !== "undefined"){
+    postImageDisplay.src = editPostImage;
+    postImageDisplay.classList.remove("hide");
+    removeMediaBtn.classList.remove("hide");
+  };
 }
 
-let editPostDetails;
-const editPostHandler = () => {
-  console.log("Edit post working properly")
-  // console.log(editPostDetails[0], editPostDetails[1], editPostDetails[2]);
+// this variables help to define the status of post
+let selectedEditPostDetails;
+let isEditPostContentAvailable;
+let isEditPostImageAvailable;
+let editPostImageState = false;
+
+const editPostHandler = async () => {
+  // console.log(selectedEditPostDetails, "Edit post working properly");
+  console.log(uploadPostImageInput.value);
+
+  if (isEditPostContentAvailable == true && isEditPostImageAvailable == false){
+    if(postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && editPostImageState === false) {
+      // const updateRef = doc(db, "User-Posts", selectedEditPostDetails[0]);
+      // const updateResponse = await updateDoc(updateRef, {
+      //   postContent : postTextArea.value,
+      // })
+      console.log("post text are edited");
+    }
+    else if(postTextArea.value === selectedEditPostDetails[1] && editPostImageState === true){
+      console.log("post text not changed but post image is added");
+    }
+    else if(postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && editPostImageState === true){
+      console.log("post text and post image both are added");
+    }
+    else if(!postTextArea.value && editPostImageState === true){
+      console.log("post text remove and post image is added");
+    }
+    else if(postTextArea.value === selectedEditPostDetails[1] && editPostImageState === false){
+      console.log("Your post is remain unchanged");
+    }
+    else{
+      console.log("Your edit post is empty");
+    }
+  }
+
+  else if (isEditPostContentAvailable == false && isEditPostImageAvailable == true){
+    if(editPostImageState === true && postTextArea.value === "") {
+      console.log("post Image are edited");
+    }
+    else if(postImageDisplay.src === selectedEditPostDetails[2] && postTextArea.value !== ""){
+      console.log("post Image not changed but post text is added");
+    }
+    else if(editPostImageState === true && postTextArea.value !== ""){
+      console.log("post image and post text both are added");
+    }
+    else if(editPostImageState === false && postTextArea.value !== ""){
+      console.log("post image remove and post text is added");
+    }
+    else if(postImageDisplay.src === selectedEditPostDetails[2] && !postTextArea.value){
+      console.log("Your post is remain unchanged");
+    }
+    else{
+      console.log("Your edit post is empty");
+    }
+  }
+
+  else {
+    if(postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== ""  && editPostImageState === true) {
+      console.log("post image and post text both are edited");
+    }
+    else if(!postTextArea.value && postImageDisplay.src === selectedEditPostDetails[2]) {
+      console.log("post text is remove but post image remain unchanged");
+    }
+    else if(postTextArea.value === selectedEditPostDetails[1] && editPostImageState === false) {
+      console.log("post image is remove but post text remain unchanged");
+    }
+    else if(postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && postImageDisplay.src === selectedEditPostDetails[2]) {
+      console.log("post text is edit but post image remain unchanged");
+    }
+    else if(postTextArea.value === selectedEditPostDetails[1] && editPostImageState === true) {
+      console.log("post image is edit but post text remain unchanged");
+    }
+    else if(postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && editPostImageState === false) {
+      console.log("post text is edit or post image is remove");
+    }
+    else if(!postTextArea.value && editPostImageState === true) {
+      console.log("post image is edit and post text is remove");
+    }
+    else if(postTextArea.value === selectedEditPostDetails[1] && postImageDisplay.src === selectedEditPostDetails[2]){
+      console.log("Your post is remain unchanged");
+    }
+    else{
+      console.log("Your edit post is empty");
+    }
+  }
+
+
 }
 
 // For Close Modal Button
