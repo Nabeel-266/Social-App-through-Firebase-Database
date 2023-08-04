@@ -16,6 +16,19 @@ import {
   getDownloadURL,
 } from "../Firebase-Configuration/firebaseConfig.js";
 
+import {
+  postEditBySetDocWithTextAndImage,
+  postEditBySetDocWithOnlyText,
+  postEditBySetDocWithOnlyImage
+} from "../Firebase-Configuration/Firebase-Functions/set-Doc.js";
+
+import {
+  postEditByUpdateDocWithTextAndImage,
+  postEditByUpdateDocWithOnlyText,
+  postEditByUpdateDocWithOnlyImage
+} from "../Firebase-Configuration/Firebase-Functions/update-Doc.js";
+
+
 // For Loader
 // const loaderArea = document.querySelector(".loaderArea");
 // setTimeout(() => {
@@ -87,8 +100,7 @@ logOutBtns.forEach((logoutBtn) => {
 
 // For Select File Image Input in Post Modal Media Options
 const uploadPostImageInput = document.querySelector("#input_Image");
-const postImageDisplay = document.querySelector("#postImageDisplay");
-const removeMediaBtn = document.querySelector(".removeMediaBtn");
+const selectMediaFile = document.querySelector(".selectMediaFile");
 
 // getting Selected Image URL
 uploadPostImageInput.addEventListener("change", () => {
@@ -99,8 +111,7 @@ uploadPostImageInput.addEventListener("change", () => {
     postImageDisplay.src = reader.result;
   });
 
-  postImageDisplay.classList.remove("hide");
-  removeMediaBtn.classList.remove("hide");
+  selectMediaFile.classList.remove("hide");
   reader.readAsDataURL(file);
   editPostImageState = true;
 });
@@ -108,8 +119,7 @@ uploadPostImageInput.addEventListener("change", () => {
 // For Cancel Selected Image Btn in Post Modal Image Area
 removeMediaBtn.addEventListener("click", () => {
   postImageDisplay.src = "";
-  postImageDisplay.classList.add("hide");
-  removeMediaBtn.classList.add("hide");
+  selectMediaFile.classList.add("hide");
   uploadPostImageInput.value = "";
   editPostImageState = false;
 });
@@ -133,7 +143,7 @@ async function postCreation() {
       const postInfo = {
         authorID: logInUserId,
         authorName: `${logInUserData.firstName} ${logInUserData.lastName}`,
-        postContent: postTextArea.value,
+        postContent: postTextArea.value.trim(),
         postDate: new Date().toLocaleDateString(),
         postTime: new Date().toLocaleTimeString()
       };
@@ -142,13 +152,13 @@ async function postCreation() {
       // console.log("Document written with ID: ", postResponse.id);
       postTextArea.value = "";
       getAllPosts();
-    } 
+    }
     catch (error) {
       console.error("Error adding document: ", error);
     }
-  } 
+  }
   // check if user create only image post so working "else if block" 
-  else if(postTextArea.value === "" && uploadPostImageInput.value !== "") {
+  else if (postTextArea.value === "" && uploadPostImageInput.value !== "") {
     const file = uploadPostImageInput.files[0];
 
     // Create the file metadata
@@ -209,7 +219,7 @@ async function postCreation() {
             });
             postTextArea.value = "";
             getAllPosts();
-          } 
+          }
           catch (error) {
             console.error("Error adding document: ", error);
           }
@@ -273,14 +283,13 @@ async function postCreation() {
             const response = await addDoc(collection(db, "User-Posts"), {
               authorID: logInUserId,
               authorName: `${logInUserData.firstName} ${logInUserData.lastName}`,
-              postContent: postTextArea.value,
+              postContent: postTextArea.value.trim(),
               postImage: downloadURL,
               postDate: new Date().toLocaleDateString(),
               postTime: new Date().toLocaleTimeString(),
             });
-            postTextArea.value = "";
             getAllPosts();
-          } 
+          }
           catch (error) {
             console.error("Error adding document: ", error);
           }
@@ -292,11 +301,15 @@ async function postCreation() {
     alert(`Dear ${logInUserName}! Your post is empty`);
   }
 
+  postModalWorkingComplete();
+}
+
+function postModalWorkingComplete() {
   overlay.classList.add("hide");
   postingModal.classList.add("hide");
-  postImageDisplay.classList.add("hide");
-  removeMediaBtn.classList.add("hide");
+  selectMediaFile.classList.add("hide");
   uploadPostImageInput.value = "";
+  postTextArea.value = "";
 }
 
 // Get all posts of all users
@@ -316,12 +329,11 @@ async function getAllPosts() {
     const singlePost = document.createElement("div");
     singlePost.setAttribute("class", "post col-12");
 
-    let singlePostInnerContent = 
-        `<div class="postAuthorDetails">
+    let singlePostInnerContent =
+      `<div class="postAuthorDetails">
             <div class="authorImage">
-                <img src="${
-                  postAuthorInfo?.profilePicture || "../Assets/users.png"
-                }" alt="Author-Image" class="userImage">
+                <img src="${postAuthorInfo?.profilePicture || "../Assets/users.png"
+      }" alt="Author-Image" class="userImage">
             </div>
             <div class="authorDetail">
                 <h3 class="authorName m-0">${authorName}</h3>
@@ -333,7 +345,7 @@ async function getAllPosts() {
                     <i class="fa-solid fa-ellipsis"></i>
                 </button>
                 <div class="editDeleteSaveBtnsArea hide">
-                    <button class="editPost" onclick="openPostEditModal('${postId}', '${postContent}', '${postImage}')">
+                    <button class="editPost" onclick="openPostEditModal('${postId}')">
                         <i class="fa-solid fa-pen"></i> 
                         Edit Post
                     </button>
@@ -392,7 +404,7 @@ async function getAllPosts() {
     postsArea.prepend(singlePost);
 
     const postTextContentArea = document.querySelector(".postTextContentArea");
-    if(!postContent){
+    if (!postContent) {
       postTextContentArea.classList.add("hide");
     }
 
@@ -400,10 +412,10 @@ async function getAllPosts() {
     const editDeleteSaveBtnsArea = document.querySelector(".editDeleteSaveBtnsArea");
     const editPost = document.querySelector(".editPost");
     const deletePost = document.querySelector(".deletePost");
-    
+
     ellipsis.addEventListener("click", () => {
       editDeleteSaveBtnsArea.classList.toggle("hide");
-      if(authorID !== logInUserId){
+      if (authorID !== logInUserId) {
         editPost.classList.add("hide");
         deletePost.classList.add("hide");
       }
@@ -421,12 +433,12 @@ async function getPostAuthorData(authorID) {
     if (docSnap.exists()) {
       // console.log("Document data:", docSnap.data());
       return docSnap.data();
-    } 
+    }
     else {
       // docSnap.data() will be undefined in this case
       console.log("Sorry! don't find your post author data");
     }
-  } 
+  }
   catch (error) {
     console.error(error);
   }
@@ -435,128 +447,142 @@ async function getPostAuthorData(authorID) {
 const closingPostingModalBtn = document.querySelector(".closePostingModalBtn");
 const modalHeading = document.querySelector(".modalHd");
 
-function openPostEditModal(editPostId, editPostContent, editPostImage) {
-  console.log(editPostImage, typeof editPostImage);
-
-  isEditPostContentAvailable = editPostContent === "undefined" ? false : true;
-  isEditPostImageAvailable = editPostImage === "undefined" ? false : true;
-  
+async function openPostEditModal(editPostId) {
   overlay.classList.remove("hide");
   postingModal.classList.remove("hide");
   postCreateBtn.innerText = "Save";
   modalHeading.innerText = "Edit Post"
-  selectedEditPostDetails = [editPostId, editPostContent, editPostImage];
   postCreateBtn.removeEventListener("click", postCreation);
   postCreateBtn.addEventListener("click", editPostHandler);
 
-  if(editPostContent !== "undefined"){
-    postTextArea.value = editPostContent;
-  };
+  try {
+    const docRef = doc(db, "User-Posts", editPostId);
+    const docSnap = await getDoc(docRef);
 
-  if(editPostImage !== "undefined"){
-    postImageDisplay.src = editPostImage;
-    postImageDisplay.classList.remove("hide");
-    removeMediaBtn.classList.remove("hide");
-  };
+    if (docSnap.exists()) {
+      // console.log("Document data:", docSnap.data());
+      const { postContent, postImage } = docSnap.data();
+
+      isEditPostContentAvailable = postContent === undefined ? false : true;
+      isEditPostImageAvailable = postImage === undefined ? false : true;
+      selectedEditPostDetails = [editPostId, postContent, postImage];
+
+      if (postContent !== undefined) {
+        postTextArea.value = postContent;
+      };
+
+      if (postImage !== undefined) {
+        postImageDisplay.src = postImage;
+        selectMediaFile.classList.remove("hide");
+      };
+    }
+    else {
+      // docSnap.data() will be undefined in this case
+      console.log("Sorry! don't find your post author data");
+    }
+  }
+  catch (error) {
+    console.error(error);
+  }
 }
+
 
 // this variables help to define the status of post
 let selectedEditPostDetails;
 let isEditPostContentAvailable;
 let isEditPostImageAvailable;
-let editPostImageState = false;
+let editPostImageState;
 
 const editPostHandler = async () => {
   // console.log(selectedEditPostDetails, "Edit post working properly");
-  console.log(uploadPostImageInput.value);
+  // console.log(uploadPostImageInput.value);
 
-  if (isEditPostContentAvailable == true && isEditPostImageAvailable == false){
-    if(postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && editPostImageState === false) {
-      // const updateRef = doc(db, "User-Posts", selectedEditPostDetails[0]);
-      // const updateResponse = await updateDoc(updateRef, {
-      //   postContent : postTextArea.value,
-      // })
+  if (isEditPostContentAvailable === true && isEditPostImageAvailable === false) {
+    if (postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && !editPostImageState) {
       console.log("post text are edited");
+      const updatePost = await postEditByUpdateDocWithOnlyText(selectedEditPostDetails[0], postTextArea.value);
     }
-    else if(postTextArea.value === selectedEditPostDetails[1] && editPostImageState === true){
+    else if (postTextArea.value === selectedEditPostDetails[1] && editPostImageState === true) {
       console.log("post text not changed but post image is added");
     }
-    else if(postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && editPostImageState === true){
+    else if (postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && editPostImageState === true) {
       console.log("post text and post image both are added");
     }
-    else if(!postTextArea.value && editPostImageState === true){
+    else if (!postTextArea.value && editPostImageState === true) {
       console.log("post text remove and post image is added");
     }
-    else if(postTextArea.value === selectedEditPostDetails[1] && editPostImageState === false){
+    else if (postTextArea.value === selectedEditPostDetails[1] && !editPostImageState) {
       console.log("Your post is remain unchanged");
     }
-    else{
+    else {
       console.log("Your edit post is empty");
     }
   }
 
-  else if (isEditPostContentAvailable == false && isEditPostImageAvailable == true){
-    if(editPostImageState === true && postTextArea.value === "") {
+  else if (isEditPostContentAvailable === false && isEditPostImageAvailable === true) {
+    if (editPostImageState === true && postTextArea.value === "") {
       console.log("post Image are edited");
     }
-    else if(postImageDisplay.src === selectedEditPostDetails[2] && postTextArea.value !== ""){
+    else if (postImageDisplay.src === selectedEditPostDetails[2] && postTextArea.value !== "") {
       console.log("post Image not changed but post text is added");
     }
-    else if(editPostImageState === true && postTextArea.value !== ""){
+    else if (editPostImageState === true && postTextArea.value !== "") {
       console.log("post image and post text both are added");
     }
-    else if(editPostImageState === false && postTextArea.value !== ""){
+    else if (editPostImageState === false && postTextArea.value !== "") {
       console.log("post image remove and post text is added");
     }
-    else if(postImageDisplay.src === selectedEditPostDetails[2] && !postTextArea.value){
+    else if (postImageDisplay.src === selectedEditPostDetails[2] && !postTextArea.value) {
       console.log("Your post is remain unchanged");
     }
-    else{
+    else {
       console.log("Your edit post is empty");
     }
   }
 
   else {
-    if(postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== ""  && editPostImageState === true) {
+    if (postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && editPostImageState === true) {
       console.log("post image and post text both are edited");
     }
-    else if(!postTextArea.value && postImageDisplay.src === selectedEditPostDetails[2]) {
+    else if (!postTextArea.value && postImageDisplay.src === selectedEditPostDetails[2]) {
       console.log("post text is remove but post image remain unchanged");
     }
-    else if(postTextArea.value === selectedEditPostDetails[1] && editPostImageState === false) {
+    else if (postTextArea.value === selectedEditPostDetails[1] && editPostImageState === false) {
       console.log("post image is remove but post text remain unchanged");
     }
-    else if(postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && postImageDisplay.src === selectedEditPostDetails[2]) {
+    else if (postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && postImageDisplay.src === selectedEditPostDetails[2]) {
       console.log("post text is edit but post image remain unchanged");
     }
-    else if(postTextArea.value === selectedEditPostDetails[1] && editPostImageState === true) {
+    else if (postTextArea.value === selectedEditPostDetails[1] && editPostImageState === true) {
       console.log("post image is edit but post text remain unchanged");
     }
-    else if(postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && editPostImageState === false) {
+    else if (postTextArea.value !== selectedEditPostDetails[1] && postTextArea.value !== "" && editPostImageState === false) {
       console.log("post text is edit or post image is remove");
     }
-    else if(!postTextArea.value && editPostImageState === true) {
+    else if (!postTextArea.value && editPostImageState === true) {
       console.log("post image is edit and post text is remove");
     }
-    else if(postTextArea.value === selectedEditPostDetails[1] && postImageDisplay.src === selectedEditPostDetails[2]){
+    else if (postTextArea.value === selectedEditPostDetails[1] && postImageDisplay.src === selectedEditPostDetails[2]) {
       console.log("Your post is remain unchanged");
     }
-    else{
+    else {
       console.log("Your edit post is empty");
     }
   }
 
-
+  getAllPosts();
+  postModalWorkingComplete();
 }
 
 // For Close Modal Button
 closingPostingModalBtn.addEventListener("click", () => {
   overlay.classList.add("hide");
   postingModal.classList.add("hide");
-  postImageDisplay.classList.add("hide");
-  removeMediaBtn.classList.add("hide");
+  selectMediaFile.classList.add("hide")
   postCreateBtn.removeEventListener("click", editPostHandler);
   postCreateBtn.addEventListener("click", postCreation);
+  postTextArea.value = "";
+  uploadPostImageInput.value = "";
 });
 
 window.openPostEditModal = openPostEditModal;

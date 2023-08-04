@@ -700,7 +700,7 @@ body {
     margin-bottom: 12% !important;
 }
 
-.editDeleteSaveButtons .editDeleteSaveBtnsArea{
+.editDeleteSaveButtons .editDeleteSaveBtnsArea {
     position: absolute;
     top: 70%;
     right: 0;
@@ -712,12 +712,14 @@ body {
     border-radius: 6px;
 }
 
-.editPost, .savePost, .deletePost{
+.editPost,
+.savePost,
+.deletePost {
     border: none;
     outline: none;
     background: transparent;
     padding: 8px 8px;
-    font-size: 1.7rem;
+    font-size: 1.5rem;
     font-weight: 500;
     text-align: left;
     color: var(--text-Color-Light);
@@ -728,7 +730,9 @@ body {
     transition: 0.2s;
 }
 
-.editPost:hover, .savePost:hover, .deletePost:hover{
+.editPost:hover,
+.savePost:hover,
+.deletePost:hover {
     background-color: var(--text-Color-Medium);
     /* color: var(--text-Color-Dark); */
 }
