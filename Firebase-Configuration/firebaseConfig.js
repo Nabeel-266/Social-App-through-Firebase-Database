@@ -24,6 +24,9 @@ import {
   updateDoc,
   where,
   query,
+  deleteField,
+  orderBy,
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 import {
@@ -77,5 +80,8 @@ export {
   ref,
   uploadBytesResumable,
   getDownloadURL,
-  updateDoc
+  updateDoc,
+  deleteField,
+  orderBy,
+  serverTimestamp,
 };
